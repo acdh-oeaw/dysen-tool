@@ -6,7 +6,6 @@ if (process.env.NODE_ENV === 'production') {
     css: {
       sourceMap: true,
     },
-    outputDir: 'html',
     configureWebpack: {
       devtool: '',
       optimization: {
@@ -27,7 +26,6 @@ if (process.env.NODE_ENV === 'production') {
   };
 } else {
   module.exports = {
-    outputDir: 'dist',
     configureWebpack: {
       devtool: 'eval-source-map',
     },
