@@ -1,15 +1,13 @@
 <template>
-  <div>
-    <div class="vis-component-inner">
-      <div class="head d-flex">
-        <b-link class="mr-1" @click="$bvModal.show('info-modal')">
-          <info-icon></info-icon>
-        </b-link>
-        <span class="vis-title">Sentiment and Frequency Distributions per Media Source</span>
-      </div>
-      <b-modal id="info-modal" title="Sentiment and Frequency Distributions per Media Source" ok-only scrollable>Explanation on this component</b-modal>
-      <highcharts :options="chartOptions" ref="bubble-chart"></highcharts>
+  <div class="vis-component-inner">
+    <div class="head d-flex">
+      <b-link class="mr-1" @click="$bvModal.show('info-modal')">
+        <info-icon></info-icon>
+      </b-link>
+      <span class="vis-title">Sentiment and Frequency Distributions per Media Source</span>
     </div>
+    <b-modal id="info-modal" title="Sentiment and Frequency Distributions per Media Source" ok-only scrollable>Explanation on this component</b-modal>
+    <highcharts :options="chartOptions" ref="bubble-chart" :highcharts="Highcharts"></highcharts>
   </div>
 </template>
 
@@ -24,7 +22,7 @@ export default {
     InfoIcon,
   },
   props: {
-    chartProp: Object,
+    chartProp: Array,
     elKey: Number,
   },
   data() {
@@ -35,19 +33,17 @@ export default {
           enabled: false,
         },
         chart: {
-          type: 'bubble',
-          zoomType: 'xy',
-          height: 360,
+          type: 'scatter',
+          height: 600,
           spacingBottom: 20,
           spacingTop: 20,
           spacingLeft: 10,
           spacingRight: 20,
-          style: {
-            cursor: 'crosshair',
-          },
         },
         title: false,
         xAxis: {
+          min: -1,
+          max: 1,
           title: {
             enabled: true,
             text: "Sentiment Score",
@@ -77,6 +73,23 @@ export default {
           title: {
             text: "Normalised Frequency (per 1m tokens)",
           },
+          plotLines: [{
+            color: 'red',
+            dashStyle: 'dot',
+            width: 2,
+            value: this.chartProp.freqBaseline,
+            label: {
+              rotation: 0,
+              y: -5,
+              style: {
+                fontStyle: 'italic',
+                fontSize: '10',
+              },
+              textAlign: 'center',
+              text: 'Baseline (Average Frequency)',
+            },
+            zIndex: 3,
+          }],
         },
         legend: {
           layout: 'horizontal',
@@ -91,6 +104,7 @@ export default {
               enabled: true,
               format: '{point.source}',
             },
+            stickyTracking: false,
           },
           scatter: {
             dataLabels: {
@@ -121,7 +135,9 @@ export default {
             '<span><b>{point.source}</b></span>:<br/>Relative freq: {point.x}%<br/> Absolute freq:: {point.y}<br/> Partition size: {point.z}<br/>',
           shared: true,
         },
-        series: this.chartProp.series,
+        series: [{
+          data: this.chartProp.data
+        }]
       },
     };
   },

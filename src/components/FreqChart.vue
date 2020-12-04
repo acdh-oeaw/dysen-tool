@@ -1,5 +1,10 @@
 <template>
-  <highcharts :options="chartOptions" ref="chart"></highcharts>
+  <div class="vis-component-inner">
+    <div class="head d-flex">
+      <span class="vis-title">Title</span>
+    </div>
+    <highcharts :options="chartOptions" ref="chart"></highcharts>
+  </div>
 </template>
 
 <script>
@@ -19,7 +24,7 @@ export default {
           enabled: false,
         },
         chart: {
-          type: 'spline',
+          type: 'line',
           zoomType: 'x',
           height: 350,
           spacingBottom: 20,
@@ -48,11 +53,12 @@ export default {
         },
         plotOptions: {
           series: {
+            animation: false,
             label: {
               connectorAllowed: false,
             },
             marker: {
-              radius: 6,
+              radius: 2,
             },
             dataLabels: {
               enabled: false,
@@ -60,6 +66,8 @@ export default {
               padding: 8,
               format: '{point.y} %',
             },
+            lineWidth: 1,
+            stickyTracking: false
           },
           spline: {
             dataLabels: {

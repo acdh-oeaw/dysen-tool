@@ -15,6 +15,10 @@ Vue.use(IconsPlugin);
 Vue.use(HighchartsVue);
 Vue.prototype.Highcharts = Highcharts;
 
+Highcharts.setOptions({
+  credits: false,
+});
+
 Vue.component('v-select', vSelect)
 
 Vue.config.productionTip = false;

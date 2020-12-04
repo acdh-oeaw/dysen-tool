@@ -1,16 +1,16 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import dysenData from '@/store/data_export_data_omitted_on_year_lvl_v1.1.json';
+import dysenData from '@/store/data.json';
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    availableWords: dysenData.searchTermList,
-    availableYears: dysenData.yearList,
-    selectedWord: dysenData.searchTermList[0],
-    selectedYear: dysenData.yearList[dysenData.yearList.length - 1],
+    availableWords: dysenData.stl,
+    availableYears: dysenData.yList,
+    selectedWord: dysenData.stl[0],
+    selectedYear: dysenData.yList[dysenData.yList.length - 1],
     yearlySentimentData: [],
     scatterplotData: [],
   },
@@ -32,35 +32,62 @@ const store = new Vuex.Store({
       let yearlySentimentData = [];
       let chartDataSources = [];
       const selectedWordObj = dysenData.series.find(obj => {
-        return obj.searchTerm === state.selectedWord;
+        return obj.sT === state.selectedWord;
       });
-      for (const yearData of selectedWordObj.yearSeries) {
-        for (const dataPoint of yearData.dataPoints) {
-          if (chartDataSources.includes(dataPoint.source)) {
+      for (const yearData of selectedWordObj.yS) {
+        for (const dataPoint of yearData.dP) {
+          if (chartDataSources.includes(dataPoint.s)) {
             const sourceObjIndex = yearlyFreqData.findIndex(obj => {
-              return obj.name === dataPoint.source;
+              return obj.name === dataPoint.s;
             });
-            yearlyFreqData[sourceObjIndex].data.push([yearData.year, dataPoint.relativeFrequency]);
-              // Temp: Random sentiment score
-              if (dataPoint.sentimentScore === 0) dataPoint.sentimentScore = Math.random() * 2 - 1;
-            yearlySentimentData[sourceObjIndex].data.push([yearData.year, dataPoint.sentimentScore]);
+            yearlyFreqData[sourceObjIndex].data.push([yearData.y, dataPoint.rF]);
+            // Start: Temp: Random sentiment score
+            if (dataPoint.sS === 0) dataPoint.sS = Math.random() * 2 - 1;
+            // End: Temp: Random sentiment score
+            yearlySentimentData[sourceObjIndex].data.push([yearData.y, dataPoint.sS]);
           } else {
-            chartDataSources.push(dataPoint.source);
+            chartDataSources.push(dataPoint.s);
             yearlyFreqData.push({
-              name: dataPoint.source,
-              data: [[yearData.year, dataPoint.relativeFrequency]]
+              name: dataPoint.s,
+              data: [[yearData.y, dataPoint.rF]]
             });
-              // Temp: Random sentiment score
-              if (dataPoint.sentimentScore === 0) dataPoint.sentimentScore = Math.random() * 2 - 1;
+            // Start: Temp: Random sentiment score
+            if (dataPoint.sS === 0) dataPoint.sS = Math.random() * 2 - 1;
+            // End: Temp: Random sentiment score
             yearlySentimentData.push({
-              name: dataPoint.source,
-              data: [[yearData.year, dataPoint.sentimentScore]]
+              name: dataPoint.s,
+              data: [[yearData.y, dataPoint.sS]]
             });
           }
         }
       }
       return {yearlyFreqData, yearlySentimentData};
     },
+    bubbleData(state) {
+      let bubbleChartData;
+      const selectedWordObj = dysenData.series.find(obj => {
+        return obj.sT === state.selectedWord;
+      });
+      const selectedSeriesObj = selectedWordObj.yS.find(obj => {
+        return obj.y === state.selectedYear;
+      });
+      if (selectedSeriesObj) {
+        bubbleChartData = selectedSeriesObj.dP.map((obj) => {
+          // Start: Temp: Random sentiment score
+          //if (obj.sS === 0) obj.sS = Math.random() * 2 - 1;
+          // End: Temp: Random sentiment score
+          return {
+            name: obj.s,
+            x: obj.sS,
+            y: obj.rF
+          }
+        });
+      }
+      return {
+        data: bubbleChartData,
+        freqBaseline: selectedSeriesObj.rF
+      };
+    }
   },
   actions: {
   }
