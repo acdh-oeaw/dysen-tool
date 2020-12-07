@@ -1,44 +1,30 @@
 <template>
-  <div class="vis-component-inner">
-    <div class="head d-flex">
-      <b-link class="mr-1" @click="$bvModal.show('info-modal')">
-        <info-icon></info-icon>
-      </b-link>
-      <span class="vis-title">Sentiment and Frequency Distributions per Media Source</span>
-    </div>
-    <b-modal id="info-modal" title="Sentiment and Frequency Distributions per Media Source" ok-only scrollable>Explanation on this component</b-modal>
-    <highcharts :options="chartOptions" ref="bubble-chart" :highcharts="Highcharts"></highcharts>
-  </div>
+  <highcharts :options="chartOptions" ref="chart" :highcharts="Highcharts"></highcharts>
 </template>
 
 <script>
-import {
-  InfoIcon,
-} from 'vue-feather-icons';
-
 
 export default {
   components: {
-    InfoIcon,
   },
   props: {
-    chartProp: Array,
+    chartProp: Object,
     elKey: Number,
   },
   data() {
     return {
-      seriesData: this.chartProp.series,
       chartOptions: {
         exporting: {
           enabled: false,
         },
         chart: {
+          animation: false,
           type: 'scatter',
-          height: 600,
-          spacingBottom: 20,
-          spacingTop: 20,
-          spacingLeft: 10,
-          spacingRight: 20,
+          height: 0,
+          spacingBottom: 15,
+          spacingTop: 15,
+          spacingLeft: 2,
+          spacingRight: 10,
         },
         title: false,
         xAxis: {
@@ -81,6 +67,7 @@ export default {
             label: {
               rotation: 0,
               y: -5,
+              x: 60,
               style: {
                 fontStyle: 'italic',
                 fontSize: '10',
@@ -92,6 +79,7 @@ export default {
           }],
         },
         legend: {
+          enabled: false,
           layout: 'horizontal',
           align: 'center',
           verticalAlign: 'top',
@@ -100,20 +88,22 @@ export default {
         },
         plotOptions: {
           series: {
+            animation: false,
             dataLabels: {
               enabled: true,
-              format: '{point.source}',
+              format: '{point.name}',
             },
             stickyTracking: false,
           },
           scatter: {
             dataLabels: {
-              format: '{point.source}',
+              format: '{point.name}',
               enabled: true,
             },
             marker: {
               radius: 8,
               fillOpacity: 0.3,
+              symbol: 'circle',
               states: {
                 hover: {
                   enabled: true,
@@ -132,18 +122,30 @@ export default {
         },
         tooltip: {
           pointFormat:
-            '<span><b>{point.source}</b></span>:<br/>Relative freq: {point.x}%<br/> Absolute freq:: {point.y}<br/> Partition size: {point.z}<br/>',
+            '<span><b>{point.name}</b></span>:<br/>Sentiment Score: {point.x}%<br/> Normalised Frequency: {point.y}<br/>',
           shared: true,
         },
-        series: [{
-          data: this.chartProp.data
-        }]
+        series: this.chartProp.data,
       },
     };
   },
+  mounted() {
+    this.defineChartHeight();
+  },
+  created() {
+    window.addEventListener("resize", this.resizeHandler);
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.resizeHandler);
+  },
   methods: {
-  },
-  watch: {
-  },
+    resizeHandler() {
+      this.defineChartHeight();
+    },
+    defineChartHeight() {
+      const chartHeight = this.$refs.chart.$el.parentElement.parentElement.clientHeight - 34 - 65;
+      if (chartHeight) this.chartOptions.chart.height = chartHeight;
+    }
+  }
 };
 </script>

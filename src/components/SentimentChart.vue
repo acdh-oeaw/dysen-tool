@@ -4,9 +4,9 @@
       <b-link class="mr-1" @click="$bvModal.show(chartInfoModalId)">
         <info-icon></info-icon>
       </b-link>
-      <span class="vis-title">Yearly Normalised Frequency Distributions</span>
+      <span class="vis-title">Yearly Sentiment Score Distributions</span>
     </div>
-    <b-modal :id="chartInfoModalId" title="Yearly Normalised Frequency Distributions" ok-only scrollable>Explanation on this component</b-modal>
+    <b-modal :id="chartInfoModalId" title="Yearly Sentiment Score Distributions" ok-only scrollable>Explanation on this component</b-modal>
     <highcharts :options="chartOptions"></highcharts>
   </div>
 </template>

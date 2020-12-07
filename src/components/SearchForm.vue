@@ -1,6 +1,7 @@
 <template>
-  <div class="col">
-    <b-form-group id="select-word-group">
+  <div class="col d-flex align-items-center">
+    <p class="m-0 pr-2">Search:</p>
+    <b-form-group id="select-word-group" class="flex-auto">
       <v-select
         id="select-word"
         :value="$store.state.selectedWord"
@@ -38,4 +39,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  #select-word-group {
+    margin: 0;
+  }
 </style>

@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import Highcharts from 'highcharts';
 
 import dysenData from '@/store/data.json';
 
@@ -8,11 +9,9 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     availableWords: dysenData.stl,
-    availableYears: dysenData.yList,
+    availableYears: [],
     selectedWord: dysenData.stl[0],
     selectedYear: dysenData.yList[dysenData.yList.length - 1],
-    yearlySentimentData: [],
-    scatterplotData: [],
   },
   mutations: {
     changeSelectedWord (state, word) {
@@ -27,14 +26,16 @@ const store = new Vuex.Store({
     availableYears: (state) => state.availableYears,
     selectedWord: (state) => state.selectedWord,
     selectedYear: (state) => state.selectedYear,
-    yearlyData(state) {
+    chartData(state) {
       let yearlyFreqData = [];
       let yearlySentimentData = [];
       let chartDataSources = [];
+      let availableYears = [];
       const selectedWordObj = dysenData.series.find(obj => {
         return obj.sT === state.selectedWord;
       });
       for (const yearData of selectedWordObj.yS) {
+        availableYears.push(yearData.y);
         for (const dataPoint of yearData.dP) {
           if (chartDataSources.includes(dataPoint.s)) {
             const sourceObjIndex = yearlyFreqData.findIndex(obj => {
@@ -61,33 +62,39 @@ const store = new Vuex.Store({
           }
         }
       }
-      return {yearlyFreqData, yearlySentimentData};
-    },
-    bubbleData(state) {
-      let bubbleChartData;
-      const selectedWordObj = dysenData.series.find(obj => {
-        return obj.sT === state.selectedWord;
-      });
+      state.availableYears = availableYears;
+      let scatterplotDataSeries;
+      let freqBaseline;
       const selectedSeriesObj = selectedWordObj.yS.find(obj => {
         return obj.y === state.selectedYear;
       });
       if (selectedSeriesObj) {
-        bubbleChartData = selectedSeriesObj.dP.map((obj) => {
-          // Start: Temp: Random sentiment score
-          //if (obj.sS === 0) obj.sS = Math.random() * 2 - 1;
-          // End: Temp: Random sentiment score
+        freqBaseline = selectedSeriesObj.rF;
+        scatterplotDataSeries = selectedSeriesObj.dP.map((obj) => {
+          const sourceIndexInFreqChartData = yearlyFreqData.findIndex(objFreq => {
+            return objFreq.name === obj.s;
+          });
           return {
-            name: obj.s,
-            x: obj.sS,
-            y: obj.rF
+            data: [
+              {
+                name: obj.s,
+                x: obj.sS,
+                y: obj.rF,
+                color: Highcharts.getOptions().colors[sourceIndexInFreqChartData]
+              }
+            ]
           }
         });
       }
       return {
-        data: bubbleChartData,
-        freqBaseline: selectedSeriesObj.rF
+        yearlyFreqData, 
+        yearlySentimentData, 
+        scatterplotData: {
+          data: scatterplotDataSeries,
+          freqBaseline
+        }
       };
-    }
+    },
   },
   actions: {
   }
