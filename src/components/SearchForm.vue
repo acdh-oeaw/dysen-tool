@@ -1,7 +1,7 @@
 <template>
   <div class="col d-flex align-items-center">
     <p class="m-0 pr-2">Search:</p>
-    <b-form-group id="select-word-group" class="flex-auto">
+    <b-form-group id="select-word-group">
       <v-select
         id="select-word"
         :value="$store.state.selectedWord"
@@ -41,5 +41,6 @@ export default {
 <style scoped>
   #select-word-group {
     margin: 0;
+    flex: auto;
   }
 </style>

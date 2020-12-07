@@ -116,15 +116,8 @@ export default {
 </script>
 
 <style lang="scss">
-/*
- * Dashboard CSS
- */
-@import url('https://fonts.googleapis.com/css?family=Barlow&display=swap');
-@import url('https://fonts.googleapis.com/css?family=Signika&display=swap');
 
 body {
-  font-size: .8rem;
-  font-family: 'Barlow', sans-serif;
   background-color: #F1F1F1 !important;
 }
 
@@ -135,11 +128,6 @@ body {
 }
 
 .highcharts-root {
-
-  * {
-    font-family: 'Barlow', sans-serif !important;
-    font-weight: 400 !important;
-  }
 
   .highcharts-point {
     opacity: 0.95;
