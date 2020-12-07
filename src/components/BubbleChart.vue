@@ -1,15 +1,43 @@
 <template>
-  <highcharts :options="chartOptions" ref="chart" :highcharts="Highcharts"></highcharts>
+  <div class="vis-component-inner">
+    <div class="head d-flex">
+      <b-link class="mr-1" @click="$bvModal.show('scatter-modal')">
+        <info-icon></info-icon>
+      </b-link>
+      <span class="vis-title">Sentiment and Frequency Distributions per Media Source</span>
+    </div>
+    <b-modal id="scatter-modal" title="Sentiment Score and Frequency Distributions per Media Source and Year" ok-only scrollable>Explanation on this component</b-modal>
+    <div class="col pt-2 year-slider-row">
+      <label for="range-year">Year Selection:</label>
+      <vue-slider
+        ref="slider"
+        v-model="selectedYear"
+        :min="availableYears[0]"
+        :max="availableYears[availableYears.length - 1]"
+        :data="availableYears"
+        :lazy="true"
+        :adsorb="true"
+        :duration="0.3"
+        :marks="marks"
+        :tooltip="'none'"
+      />
+    </div>
+    <highcharts :options="chartOptions" ref="chart" :highcharts="Highcharts"></highcharts>
+  </div>
 </template>
 
 <script>
+import VueSlider from 'vue-slider-component'
+import 'vue-slider-component/theme/antd.css'
+import { InfoIcon } from 'vue-feather-icons';
 
 export default {
   components: {
+    VueSlider, InfoIcon
   },
   props: {
     chartProp: Object,
-    elKey: Number,
+    elKey: String,
   },
   data() {
     return {
@@ -129,6 +157,24 @@ export default {
       },
     };
   },
+  computed: {
+    selectedYear: {
+      get() {
+        return this.$store.getters.selectedYear;
+      },
+      set(val) {
+        this.$store.dispatch('onSelectedYearChange', val);
+      },
+    },
+    availableYears: {
+      get() {
+        return this.$store.getters.availableYears;
+      },
+    },
+    marks() {
+      return this.availableYears;
+    }
+  },
   mounted() {
     this.defineChartHeight();
   },
@@ -143,9 +189,27 @@ export default {
       this.defineChartHeight();
     },
     defineChartHeight() {
-      const chartHeight = this.$refs.chart.$el.parentElement.parentElement.clientHeight - 34 - 65;
+      const chartHeight = this.$refs.chart.$el.parentElement.parentElement.clientHeight - 34 - 90;
       if (chartHeight) this.chartOptions.chart.height = chartHeight;
     }
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.year-slider-row {
+  font-size: 0.9rem;
+  min-height: 90px;
+  padding: 0 15px 0 25px;
+
+  .vue-slider {
+    padding: 3px 7px 5px 5px !important;
+
+    .vue-slider-mark-label {
+      transform: rotate(-45deg);
+      left: -20px;
+    }
+
+  }
+}
+</style>

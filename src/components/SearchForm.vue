@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     onSelectedWordChange(word) {
-      this.$store.commit('changeSelectedWord', word);
+      this.$store.dispatch('onSelectedWordChange', word);
     },
   },
   computed: {

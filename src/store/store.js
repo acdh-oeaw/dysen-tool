@@ -9,31 +9,30 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     availableWords: dysenData.stl,
-    availableYears: [],
+    availableYears: [0],
     selectedWord: dysenData.stl[0],
     selectedYear: dysenData.yList[dysenData.yList.length - 1],
+    yearlyFreqData: [],
+    yearlySentimentData: [],
+    scatterplotData: { data: [], freqBaseline: '' }
   },
   mutations: {
-    changeSelectedWord (state, word) {
+    updateSelectedWord (state, word) {
       state.selectedWord = word;
     },
-    changeSelectedYear (state, year) {
+    updateSelectedYear (state, year) {
       state.selectedYear = year;
     },
-  },
-  getters: {
-    availableWords: (state) => state.availableWords,
-    availableYears: (state) => state.availableYears,
-    selectedWord: (state) => state.selectedWord,
-    selectedYear: (state) => state.selectedYear,
-    chartData(state) {
+    updateSelectedWordSeriesData (state, word = state.selectedWord) {
       let yearlyFreqData = [];
       let yearlySentimentData = [];
       let chartDataSources = [];
       let availableYears = [];
+      // Find the series object for the selected word
       const selectedWordObj = dysenData.series.find(obj => {
-        return obj.sT === state.selectedWord;
+        return obj.sT === word;
       });
+      // Process data for both line charts and the determine the available years
       for (const yearData of selectedWordObj.yS) {
         availableYears.push(yearData.y);
         for (const dataPoint of yearData.dP) {
@@ -63,15 +62,25 @@ const store = new Vuex.Store({
         }
       }
       state.availableYears = availableYears;
+      state.selectedYear = availableYears[state.availableYears.length - 1];
+      state.yearlyFreqData = yearlyFreqData;
+      state.yearlySentimentData = yearlySentimentData;
+    },
+    updateSelectedYearSeriesData (state) {
       let scatterplotDataSeries;
       let freqBaseline;
+      // Find the series object for the selected word
+      const selectedWordObj = dysenData.series.find(obj => {
+        return obj.sT === state.selectedWord;
+      });
+      // Process data for sentiment score scatterplot
       const selectedSeriesObj = selectedWordObj.yS.find(obj => {
         return obj.y === state.selectedYear;
       });
       if (selectedSeriesObj) {
         freqBaseline = selectedSeriesObj.rF;
         scatterplotDataSeries = selectedSeriesObj.dP.map((obj) => {
-          const sourceIndexInFreqChartData = yearlyFreqData.findIndex(objFreq => {
+          const sourceIndexInFreqChartData = state.yearlyFreqData.findIndex(objFreq => {
             return objFreq.name === obj.s;
           });
           return {
@@ -86,17 +95,35 @@ const store = new Vuex.Store({
           }
         });
       }
-      return {
-        yearlyFreqData, 
-        yearlySentimentData, 
-        scatterplotData: {
-          data: scatterplotDataSeries,
-          freqBaseline
-        }
+      state.scatterplotData = {
+        data: scatterplotDataSeries,
+        freqBaseline
       };
-    },
+    }
+  },
+  getters: {
+    availableWords: (state) => state.availableWords,
+    availableYears: (state) => state.availableYears,
+    selectedWord: (state) => state.selectedWord,
+    selectedYear: (state) => state.selectedYear,
+    yearlyFreqData: (state) => state.yearlyFreqData,
+    yearlySentimentData: (state) => state.yearlySentimentData,
+    scatterplotData: (state) => state.scatterplotData,
   },
   actions: {
+    onApplicationLoad({ commit }) {
+      commit('updateSelectedWordSeriesData');
+      commit('updateSelectedYearSeriesData');
+    },
+    onSelectedWordChange({ commit }, word) {
+      commit('updateSelectedWord', word);
+      commit('updateSelectedWordSeriesData', word);
+      commit('updateSelectedYearSeriesData');
+    },
+    onSelectedYearChange({ commit }, year) {
+      commit('updateSelectedYear', year);
+      commit('updateSelectedYearSeriesData');
+    },
   }
 })
 

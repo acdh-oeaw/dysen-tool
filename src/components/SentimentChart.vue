@@ -4,9 +4,9 @@
       <b-link class="mr-1" @click="$bvModal.show(chartInfoModalId)">
         <info-icon></info-icon>
       </b-link>
-      <span class="vis-title">Yearly Sentiment Score Distributions</span>
+      <span class="vis-title">Sentiment Score Distributions over Time</span>
     </div>
-    <b-modal :id="chartInfoModalId" title="Yearly Sentiment Score Distributions" ok-only scrollable>Explanation on this component</b-modal>
+    <b-modal :id="chartInfoModalId" title="Sentiment Score Distributions over Time" ok-only scrollable>Explanation on this component</b-modal>
     <highcharts :options="chartOptions"></highcharts>
   </div>
 </template>
@@ -22,7 +22,7 @@ export default {
   },
   props: {
     chartProp: Array,
-    elKey: Number,
+    elKey: String,
   },
   data() {
     return {
