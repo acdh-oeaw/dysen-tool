@@ -6,16 +6,20 @@
           <div class="col-md-1 navbar-brand m-0">
             DYSEN
           </div>
-          <div class="col-md-5">
+          <div class="col-md-5 m-auto">
             <SearchForm/>
           </div>
-          <div class="col-md-4 ml-auto text-right">
-            <row>
-              DYSEN is developed part of the <a href="https://dylen.acdh.oeaw.ac.at/">DYLEN</a> project.
-            </row>
-            <row>
+          <div class="col-md-6 ml-auto text-right">
+            <div>
+              The DYSEN project is funded by the Stadt Wien Kultur.
+            </div>
+            <div>
+              <a id="how-to">How to use this tool?</a>
+              <span> | </span>
+              <a href="https://dylen.acdh.oeaw.ac.at/dysen/">More about the project</a>
+              <span> | </span>
               <a href="https://dylen.acdh.oeaw.ac.at/imprint">Imprint</a>
-            </row>
+            </div>
           </div>
         </nav>
       </div>
@@ -24,36 +28,17 @@
           <div class="col-md-6">
             <div class="row pb-1">
               <div class="col-md-12 vis-component half-height mb-1">
-                <FreqChart :chartProp="chartData.yearlyFreqData" :key="chartKey" elKey="1"/>
+                <FreqChart/>
               </div>
             </div>
             <div class="row pb-1">
               <div class="col-md-12 vis-component half-height mb-1">
-                <SentimentChart :chartProp="chartData.yearlySentimentData" :key="chartKey" elKey="2"/>
+                <SentimentChart/>
               </div>
             </div>
           </div>
           <div class="col-md-6 vis-component full-height">
-            <div class="vis-component-inner">
-              <div class="head d-flex">
-                <b-link class="mr-1" @click="$bvModal.show('scatter-modal')">
-                  <info-icon></info-icon>
-                </b-link>
-                <span class="vis-title">Sentiment and Frequency Distributions per Media Source</span>
-              </div>
-              <b-modal id="scatter-modal" title="Sentiment and Frequency Distributions per Media Source" ok-only scrollable>Explanation on this component</b-modal>
-              <div class="col pt-2">
-                <label for="range-year">Year Selection:</label>
-                <vue-range-slider
-                  ref="slider"
-                  v-model="selectedYear"
-                  :min="$store.state.availableYears[0]"
-                  :max="$store.state.availableYears[$store.state.availableYears.length - 1]"
-                  :data="$store.state.availableYears">
-                </vue-range-slider>
-              </div>
-              <BubbleChart :chartProp="chartData.scatterplotData" :key="chartKey" elKey="3"/>
-            </div>
+            <BubbleChart/>
           </div>
         </div>
       </main>
@@ -67,56 +52,27 @@ import SearchForm from '@/components/SearchForm';
 import FreqChart from '@/components/FreqChart';
 import SentimentChart from '@/components/SentimentChart';
 import BubbleChart from '@/components/BubbleChart';
-import 'vue-range-component/dist/vue-range-slider.css';
-import VueRangeSlider from 'vue-range-component';
-import { InfoIcon } from 'vue-feather-icons';
 
 export default {
   name: 'App',
   components: {
-    SearchForm, FreqChart, SentimentChart, BubbleChart, VueRangeSlider, InfoIcon
+    SearchForm, FreqChart, SentimentChart, BubbleChart
   },
   data() {
     return {
-      chartKey: 0,
     }
   },
   mounted() {
+    this.$store.dispatch('onApplicationLoad');
   },
   computed: {
-    chartData: {
-      get() {
-        return this.$store.getters.chartData;
-      }
-    },
-    selectedYear: {
-      get() {
-        return this.$store.getters.selectedYear;
-      },
-      set(val) {
-        this.$store.commit('changeSelectedYear', val);
-      },
-    },
   },
   watch: {
-    chartData: {
-      handler() {
-        this.chartKey += 1;
-      },
-      deep: true,
-    },
-    selectedYear: {
-      handler() {
-        this.chartKey += 1;
-      },
-      deep: true,
-    },
   },
 }
 </script>
 
 <style lang="scss">
-
 body {
   background-color: #F1F1F1 !important;
 }
@@ -223,6 +179,11 @@ main {
   background-color: #fff;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.03);
   z-index: 99;
+}
+
+.navbar-brand {
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
 }
 
 .vis-component.half-height {

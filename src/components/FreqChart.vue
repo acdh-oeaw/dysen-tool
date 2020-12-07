@@ -4,9 +4,9 @@
       <b-link class="mr-1" @click="$bvModal.show(chartInfoModalId)">
         <info-icon></info-icon>
       </b-link>
-      <span class="vis-title">Yearly Normalised Frequency Distributions</span>
+      <span class="vis-title">Normalised Frequency Distributions over Time</span>
     </div>
-    <b-modal :id="chartInfoModalId" title="Yearly Normalised Frequency Distributions" ok-only scrollable>Explanation on this component</b-modal>
+    <b-modal :id="chartInfoModalId" title="Normalised Frequency Distributions over Time" ok-only scrollable>Explanation on this component</b-modal>
     <highcharts :options="chartOptions"></highcharts>
   </div>
 </template>
@@ -22,7 +22,7 @@ export default {
   },
   props: {
     chartProp: Array,
-    elKey: Number,
+    elKey: String,
   },
   data() {
     return {
@@ -33,6 +33,7 @@ export default {
         },
         chart: {
           animation: false,
+          zoom: 'x',
           type: 'line',
           height: 0,
           spacingBottom: 7,
@@ -64,12 +65,13 @@ export default {
             stickyTracking: false
           },
         },
-        series: this.chartProp,
+        series: [],
       },
     };
   },
   mounted() {
     this.defineChartHeight();
+    this.chartOptions.series = this.yearlyFreqData;
   },
   created() {
     window.addEventListener("resize", this.resizeHandler);
@@ -85,6 +87,21 @@ export default {
       const chartHeight = this.$refs.chart.parentElement.clientHeight - 34;
       if (chartHeight) this.chartOptions.chart.height = chartHeight;
     }
-  }
+  },
+  computed: {
+    yearlyFreqData: {
+      get() {
+        return this.$store.getters.yearlyFreqData;
+      }
+    },
+  },
+  watch: {
+    yearlyFreqData: {
+      handler() {
+        this.chartOptions.series = this.yearlyFreqData;
+      },
+      deep: true,
+    },
+  },
 };
 </script>

@@ -1,15 +1,41 @@
 <template>
-  <highcharts :options="chartOptions" ref="chart" :highcharts="Highcharts"></highcharts>
+  <div class="vis-component-inner">
+    <div class="head d-flex">
+      <b-link class="mr-1" @click="$bvModal.show('scatter-modal')">
+        <info-icon></info-icon>
+      </b-link>
+      <span class="vis-title">Sentiment and Frequency Distributions per Media Source</span>
+    </div>
+    <b-modal id="scatter-modal" title="Sentiment Score and Frequency Distributions per Media Source and Year" ok-only scrollable>Explanation on this component</b-modal>
+    <div class="col pt-2 year-slider-row">
+      <label for="range-year">Year Selection:</label>
+      <vue-slider
+        ref="slider"
+        v-model="selectedYear"
+        :min="availableYears[0]"
+        :max="availableYears[availableYears.length - 1]"
+        :data="availableYears"
+        :lazy="true"
+        :adsorb="true"
+        :duration="0.3"
+        :marks="marks"
+        :tooltip="'none'"
+      />
+    </div>
+    <highcharts :options="chartOptions" ref="chart" :highcharts="Highcharts"></highcharts>
+  </div>
 </template>
 
 <script>
+import VueSlider from 'vue-slider-component'
+import 'vue-slider-component/theme/antd.css'
+import { InfoIcon } from 'vue-feather-icons';
 
 export default {
   components: {
+    VueSlider, InfoIcon
   },
   props: {
-    chartProp: Object,
-    elKey: Number,
   },
   data() {
     return {
@@ -63,7 +89,7 @@ export default {
             color: 'red',
             dashStyle: 'dot',
             width: 2,
-            value: this.chartProp.freqBaseline,
+            value: 0,
             label: {
               rotation: 0,
               y: -5,
@@ -122,15 +148,40 @@ export default {
         },
         tooltip: {
           pointFormat:
-            '<span><b>{point.name}</b></span>:<br/>Sentiment Score: {point.x}%<br/> Normalised Frequency: {point.y}<br/>',
+            '<span><b>{point.name}</b></span>:<br/>Sentiment Score: {point.x}<br/> Normalised Frequency: {point.y}<br/>',
           shared: true,
         },
-        series: this.chartProp.data,
+        series: [],
       },
     };
   },
+  computed: {
+    selectedYear: {
+      get() {
+        return this.$store.getters.selectedYear;
+      },
+      set(val) {
+        this.$store.dispatch('onSelectedYearChange', val);
+      },
+    },
+    availableYears: {
+      get() {
+        return this.$store.getters.availableYears;
+      },
+    },
+    marks() {
+      return this.availableYears;
+    },
+    scatterplotData: {
+      get() {
+        return this.$store.getters.scatterplotData;
+      }
+    },
+  },
   mounted() {
     this.defineChartHeight();
+    this.chartOptions.series = this.scatterplotData.data;
+    this.chartOptions.yAxis.plotLines.value = this.scatterplotData.freqBaseline;
   },
   created() {
     window.addEventListener("resize", this.resizeHandler);
@@ -143,9 +194,36 @@ export default {
       this.defineChartHeight();
     },
     defineChartHeight() {
-      const chartHeight = this.$refs.chart.$el.parentElement.parentElement.clientHeight - 34 - 65;
+      const chartHeight = this.$refs.chart.$el.parentElement.parentElement.clientHeight - 34 - 90;
       if (chartHeight) this.chartOptions.chart.height = chartHeight;
     }
-  }
+  },
+  watch: {
+    scatterplotData: {
+      handler() {
+        this.chartOptions.series = this.scatterplotData.data;
+        this.chartOptions.yAxis.plotLines.value = this.scatterplotData.freqBaseline;
+      },
+      deep: true,
+    },
+  },
 };
 </script>
+
+<style lang="scss">
+.year-slider-row {
+  font-size: 0.9rem;
+  min-height: 90px;
+  padding: 10px 15px 0 20px !important;
+
+  .vue-slider {
+    padding: 3px 7px 5px 5px !important;
+
+    .vue-slider-mark-label {
+      transform: rotate(-45deg);
+      left: -20px;
+    }
+
+  }
+}
+</style>

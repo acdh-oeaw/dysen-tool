@@ -4,9 +4,9 @@
       <b-link class="mr-1" @click="$bvModal.show(chartInfoModalId)">
         <info-icon></info-icon>
       </b-link>
-      <span class="vis-title">Yearly Sentiment Score Distributions</span>
+      <span class="vis-title">Sentiment Score Distributions over Time</span>
     </div>
-    <b-modal :id="chartInfoModalId" title="Yearly Sentiment Score Distributions" ok-only scrollable>Explanation on this component</b-modal>
+    <b-modal :id="chartInfoModalId" title="Sentiment Score Distributions over Time" ok-only scrollable>Explanation on this component</b-modal>
     <highcharts :options="chartOptions"></highcharts>
   </div>
 </template>
@@ -22,7 +22,7 @@ export default {
   },
   props: {
     chartProp: Array,
-    elKey: Number,
+    elKey: String,
   },
   data() {
     return {
@@ -64,12 +64,13 @@ export default {
             stickyTracking: false
           },
         },
-        series: this.chartProp,
+        series: [],
       },
     };
   },
   mounted() {
     this.defineChartHeight();
+    this.chartOptions.series = this.yearlySentimentData;
   },
   created() {
     window.addEventListener("resize", this.resizeHandler);
@@ -85,6 +86,21 @@ export default {
       const chartHeight = this.$refs.chart.parentElement.clientHeight - 34;
       if (chartHeight) this.chartOptions.chart.height = chartHeight;
     }
-  }
+  },
+  computed: {
+    yearlySentimentData: {
+      get() {
+        return this.$store.getters.yearlySentimentData;
+      }
+    },
+  },
+  watch: {
+    yearlySentimentData: {
+      handler() {
+        this.chartOptions.series = this.yearlySentimentData;
+      },
+      deep: true,
+    },
+  },
 };
 </script>
