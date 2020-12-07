@@ -11,10 +11,11 @@ const store = new Vuex.Store({
     availableWords: dysenData.stl,
     availableYears: [0],
     selectedWord: dysenData.stl[0],
+    selectedWordObj: {},
     selectedYear: dysenData.yList[dysenData.yList.length - 1],
     yearlyFreqData: [],
     yearlySentimentData: [],
-    scatterplotData: { data: [], freqBaseline: '' }
+    scatterplotData: { data: [], freqBaseline: 0 }
   },
   mutations: {
     updateSelectedWord (state, word) {
@@ -42,17 +43,17 @@ const store = new Vuex.Store({
             });
             yearlyFreqData[sourceObjIndex].data.push([yearData.y, dataPoint.rF]);
             // Start: Temp: Random sentiment score
-            if (dataPoint.sS === 0) dataPoint.sS = Math.random() * 2 - 1;
+            if (dataPoint.sS === 0) dataPoint.sS = Math.round( (Math.random() * 2 - 1) * 1e2 ) / 1e2 ;
             // End: Temp: Random sentiment score
             yearlySentimentData[sourceObjIndex].data.push([yearData.y, dataPoint.sS]);
           } else {
             chartDataSources.push(dataPoint.s);
             yearlyFreqData.push({
               name: dataPoint.s,
-              data: [[yearData.y, dataPoint.rF]]
+              data: [[yearData.y, dataPoint.rF]],
             });
             // Start: Temp: Random sentiment score
-            if (dataPoint.sS === 0) dataPoint.sS = Math.random() * 2 - 1;
+            if (dataPoint.sS === 0) dataPoint.sS = Math.round( (Math.random() * 2 - 1) * 1e2 ) / 1e2 ;
             // End: Temp: Random sentiment score
             yearlySentimentData.push({
               name: dataPoint.s,
@@ -61,6 +62,7 @@ const store = new Vuex.Store({
           }
         }
       }
+      state.selectedWordObj = selectedWordObj;
       state.availableYears = availableYears;
       state.selectedYear = availableYears[state.availableYears.length - 1];
       state.yearlyFreqData = yearlyFreqData;
@@ -69,11 +71,7 @@ const store = new Vuex.Store({
     updateSelectedYearSeriesData (state) {
       let scatterplotDataSeries;
       let freqBaseline;
-      // Find the series object for the selected word
-      const selectedWordObj = dysenData.series.find(obj => {
-        return obj.sT === state.selectedWord;
-      });
-      // Process data for sentiment score scatterplot
+      const selectedWordObj = state.selectedWordObj;
       const selectedSeriesObj = selectedWordObj.yS.find(obj => {
         return obj.y === state.selectedYear;
       });

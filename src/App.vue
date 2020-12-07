@@ -6,14 +6,18 @@
           <div class="col-md-1 navbar-brand m-0">
             DYSEN
           </div>
-          <div class="col-md-5">
+          <div class="col-md-5 m-auto">
             <SearchForm/>
           </div>
-          <div class="col-md-4 ml-auto text-right">
-            <div class="row">
-              DYSEN is developed part of the <a href="https://dylen.acdh.oeaw.ac.at/">DYLEN</a> project.
+          <div class="col-md-6 ml-auto text-right">
+            <div>
+              The DYSEN project is funded by the Stadt Wien Kultur.
             </div>
-            <div class="row">
+            <div>
+              <a id="how-to">How to use this tool?</a>
+              <span> | </span>
+              <a href="https://dylen.acdh.oeaw.ac.at/dysen/">More about the project</a>
+              <span> | </span>
               <a href="https://dylen.acdh.oeaw.ac.at/imprint">Imprint</a>
             </div>
           </div>
@@ -24,17 +28,17 @@
           <div class="col-md-6">
             <div class="row pb-1">
               <div class="col-md-12 vis-component half-height mb-1">
-                <FreqChart :chartProp="yearlyFreqData" :key="freqChartKey" elKey="1"/>
+                <FreqChart/>
               </div>
             </div>
             <div class="row pb-1">
               <div class="col-md-12 vis-component half-height mb-1">
-                <SentimentChart :chartProp="yearlySentimentData" :key="freqChartKey" elKey="2"/>
+                <SentimentChart/>
               </div>
             </div>
           </div>
           <div class="col-md-6 vis-component full-height">
-            <BubbleChart :chartProp="scatterplotData" :key="scatterChartKey" elKey="3"/>
+            <BubbleChart/>
           </div>
         </div>
       </main>
@@ -56,43 +60,14 @@ export default {
   },
   data() {
     return {
-      chartKey: 0,
     }
   },
   mounted() {
     this.$store.dispatch('onApplicationLoad');
   },
   computed: {
-    yearlyFreqData: {
-      get() {
-        return this.$store.getters.yearlyFreqData;
-      }
-    },
-    yearlySentimentData: {
-      get() {
-        return this.$store.getters.yearlySentimentData;
-      }
-    },
-    scatterplotData: {
-      get() {
-        return this.$store.getters.scatterplotData;
-      }
-    },
   },
   watch: {
-    yearlyFreqData: {
-      handler() {
-        this.freqChartKey += 1;
-        this.scatterChartKey += 1;
-      },
-      deep: true,
-    },
-    selectedYear: {
-      handler() {
-        this.scatterChartKey += 1;
-      },
-      deep: true,
-    },
   },
 }
 </script>
@@ -204,6 +179,11 @@ main {
   background-color: #fff;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.03);
   z-index: 99;
+}
+
+.navbar-brand {
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
 }
 
 .vis-component.half-height {
