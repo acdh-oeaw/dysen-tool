@@ -181,7 +181,7 @@ export default {
   mounted() {
     this.defineChartHeight();
     this.chartOptions.series = this.scatterplotData.data;
-    this.chartOptions.yAxis.plotLines.value = this.scatterplotData.freqBaseline;
+    this.chartOptions.yAxis.plotLines[0].value = this.scatterplotData.freqBaseline;
   },
   created() {
     window.addEventListener("resize", this.resizeHandler);
@@ -202,7 +202,7 @@ export default {
     scatterplotData: {
       handler() {
         this.chartOptions.series = this.scatterplotData.data;
-        this.chartOptions.yAxis.plotLines.value = this.scatterplotData.freqBaseline;
+        this.chartOptions.yAxis.plotLines[0].value = this.scatterplotData.freqBaseline;
       },
       deep: true,
     },
@@ -218,6 +218,7 @@ export default {
 
   .vue-slider {
     padding: 3px 7px 5px 5px !important;
+    cursor: pointer;
 
     .vue-slider-mark-label {
       transform: rotate(-45deg);

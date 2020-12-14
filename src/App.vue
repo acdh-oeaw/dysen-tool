@@ -14,11 +14,11 @@
               The DYSEN project is funded by the Stadt Wien Kultur.
             </div>
             <div>
-              <a id="how-to">How to use this tool?</a>
+              <a id="how-to" href="#" @click="$bvModal.show('howto-modal')">How to use this tool?</a>
               <span> | </span>
-              <a href="https://dylen.acdh.oeaw.ac.at/dysen/">More about the project</a>
+              <a href="https://dylen.acdh.oeaw.ac.at/dysen/" target="_blank">More about the project</a>
               <span> | </span>
-              <a href="https://dylen.acdh.oeaw.ac.at/imprint">Imprint</a>
+              <a href="https://dylen.acdh.oeaw.ac.at/imprint" target="_blank">Imprint</a>
             </div>
           </div>
         </nav>
@@ -43,6 +43,17 @@
         </div>
       </main>
     </div>
+    <b-modal id="howto-modal" title="How to use this tool?" ok-only scrollable>
+      <ul>
+        <li>Data Source</li>
+        <li>Selected Politicians</li>
+        <li>...</li>
+      </ul>
+      <hr/>
+      Detailed Text for the DYSEN Website
+      <br/>
+      About the Project and the Tool:
+    </b-modal>
   </div>
 </template>
 

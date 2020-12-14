@@ -1,12 +1,12 @@
 <template>
   <div class="vis-component-inner" ref="chart">
     <div class="head d-flex">
-      <b-link class="mr-1" @click="$bvModal.show(chartInfoModalId)">
+      <b-link class="mr-1" @click="$bvModal.show('freq-modal')">
         <info-icon></info-icon>
       </b-link>
       <span class="vis-title">Normalised Frequency Distributions over Time</span>
     </div>
-    <b-modal :id="chartInfoModalId" title="Normalised Frequency Distributions over Time" ok-only scrollable>Explanation on this component</b-modal>
+    <b-modal id="freq-modal" title="Normalised Frequency Distributions over Time" ok-only scrollable>Explanation on this component</b-modal>
     <highcharts :options="chartOptions"></highcharts>
   </div>
 </template>
@@ -21,8 +21,6 @@ export default {
     InfoIcon,
   },
   props: {
-    chartProp: Array,
-    elKey: String,
   },
   data() {
     return {
