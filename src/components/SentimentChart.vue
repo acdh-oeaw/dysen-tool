@@ -1,12 +1,12 @@
 <template>
   <div class="vis-component-inner" ref="chart">
     <div class="head d-flex">
-      <b-link class="mr-1" @click="$bvModal.show(chartInfoModalId)">
+      <b-link class="mr-1" @click="$bvModal.show('sentiment-modal')">
         <info-icon></info-icon>
       </b-link>
       <span class="vis-title">Sentiment Score Distributions over Time</span>
     </div>
-    <b-modal :id="chartInfoModalId" title="Sentiment Score Distributions over Time" ok-only scrollable>Explanation on this component</b-modal>
+    <b-modal id="sentiment-modal" title="Sentiment Score Distributions over Time" ok-only scrollable>Explanation on this component</b-modal>
     <highcharts :options="chartOptions"></highcharts>
   </div>
 </template>
@@ -21,12 +21,9 @@ export default {
     InfoIcon,
   },
   props: {
-    chartProp: Array,
-    elKey: String,
   },
   data() {
     return {
-      chartInfoModalId: `chart-info-modal-${this.elKey}`,
       chartOptions: {
         exporting: {
           enabled: false,

@@ -218,6 +218,7 @@ export default {
 
   .vue-slider {
     padding: 3px 7px 5px 5px !important;
+    cursor: pointer;
 
     .vue-slider-mark-label {
       transform: rotate(-45deg);
