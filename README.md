@@ -31,6 +31,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ## Updating Data
 To update the static data asset, simply overwrite the file src/store/data.json keeping the same structure and property names.
 
+**Important note:** Don't forget to remove the code which generates random sentiment scores. These lines are in the src/store/store.js and commented with `// Start: Temp: Random sentiment score` and `// End: Temp: Random sentiment score`. Currently these lines to be removed are between 45-47 and 55-57.
+
 ## Updating Text Content
 To update the text content for the modal popups, edit the following files:
 * src/components/App.vue : edit the content inside the <b-modal id="howto-modal" ...> element to update the modal popup fired from the top navigation.
