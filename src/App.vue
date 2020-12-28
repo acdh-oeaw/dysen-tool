@@ -46,13 +46,13 @@
     <b-modal id="howto-modal" title="How to use this tool?" ok-only scrollable>
       <p><strong>Data Source</strong></p>
       <p>As a data source the Austrian Media Corpus (AMC) was used, which contains over 44 Mio. articles from different Austrian news outlets from the last decades with about 10 billion running words. In the tool the time span 1991 to 2017 is covered.</p>
-      <br/>
       <p><strong>Selected Politicians</strong></p>
       <p>To retrieve a list of Viennese politicians the politician archive of Vienna (POLAR) from the Vienna City and State Archives is used [1]. Regarding the AMC corpus [2] which includes media from the year 1986 to 2018 the result list is limited to politicians which were active in the timeframe between 1986 to 2020. Therefore, the politicians which were active between the 13<sup>th</sup> and the 20<sup>th</sup> parliamentary term were selected.</p>
       <p>The list contains politicians with the following political functions:</p>
       <ul>
         <li>All members of the Vienna City Council and members of the Vienna State Parliament</li>
         <li>All members of the Vienna City Senate and the Vienna State Government</li>
+      </ul>
       <p><strong>Exclusion criteria</strong></p>
       <ul>
         <li>Less than 100 hits (matching fullname) over the whole timespan: the politician is not selected.</li>
