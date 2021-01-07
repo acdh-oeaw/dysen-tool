@@ -6,7 +6,7 @@ stages:
 # build development
 
 build-dev:
-  image: "docker"
+  image: "docker:19"
   stage: build
   variables:
     DOCKER_HOST: tcp://docker:2375/
