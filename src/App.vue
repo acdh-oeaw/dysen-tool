@@ -44,15 +44,23 @@
       </main>
     </div>
     <b-modal id="howto-modal" title="How to use this tool?" ok-only scrollable>
+      <p><strong>Data Source</strong></p>
+      <p>As a data source the Austrian Media Corpus (AMC) was used, which contains over 44 Mio. articles from different Austrian news outlets from the last decades with about 10 billion running words. In the tool the time span 1991 to 2017 is covered.</p>
+      <p><strong>Selected Politicians</strong></p>
+      <p>To retrieve a list of Viennese politicians the politician archive of Vienna (POLAR) from the Vienna City and State Archives is used [1]. Regarding the AMC corpus [2] which includes media from the year 1986 to 2018 the result list is limited to politicians which were active in the timeframe between 1986 to 2020. Therefore, the politicians which were active between the 13<sup>th</sup> and the 20<sup>th</sup> parliamentary term were selected.</p>
+      <p>The list contains politicians with the following political functions:</p>
       <ul>
-        <li>Data Source</li>
-        <li>Selected Politicians</li>
-        <li>...</li>
+        <li>All members of the Vienna City Council and members of the Vienna State Parliament</li>
+        <li>All members of the Vienna City Senate and the Vienna State Government</li>
       </ul>
-      <hr/>
-      Detailed Text for the DYSEN Website
-      <br/>
-      About the Project and the Tool:
+      <p><strong>Exclusion criteria</strong></p>
+      <ul>
+        <li>Less than 100 hits (matching fullname) over the whole timespan: the politician is not selected.</li>
+        <li>Normalised frequency below 0,001: the corresponding year/media/politician is excluded.</li>
+      </ul>
+      <p><strong>References</strong></p>
+      <p>[1] D. B. Steininger. (29.03.2020).<em> Wiener Politikerinnen und Politiker 1945 - aktuell</em>. Available:<a href="https://www.wien.gv.at/advuew/internet/AdvPrSrv.asp?Layout=histpolsuche&amp;Type=S&amp;Hlayout=histpolsuche&amp;HP=Y&amp;RF=02&amp;ICD=2011021810192827"> https://www.wien.gv.at/advuew/internet/AdvPrSrv.asp?Layout=histpolsuche&amp;Type=S&amp;Hlayout=histpolsuche&amp;HP=Y&amp;RF=02&amp;ICD=2011021810192827</a></p>
+      <p>[2] Ransmayr, Jutta, K. M&ouml;rth, and M. Ďurčo. (2017, 29.03.2020). <em>AMC (Austrian Media Corpus) &ndash; Korpusbasierte Forschungen zum &ouml;sterreichischen Deutsch. In Digitale Methoden der Korpusforschung in &Ouml;sterreich (= Ver&ouml;ffentlichungen zur Linguistik und Kommunikationsforschung Nr. 30)</em>. Available:<a href="https://amc.acdh.oeaw.ac.at/"> https://amc.acdh.oeaw.ac.at/</a></p>
     </b-modal>
   </div>
 </template>
