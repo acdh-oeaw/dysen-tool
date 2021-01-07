@@ -6,7 +6,7 @@ stages:
 # build development
 
 build-dev:
-  image: "docker/compose"
+  image: "docker"
   stage: build
   variables:
     DOCKER_HOST: tcp://docker:2375/
