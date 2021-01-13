@@ -1,6 +1,6 @@
 <template>
   <div class="col d-flex align-items-center">
-    <p class="m-0 pr-2">Search:</p>
+    <p class="m-0 pr-2">Politician:</p>
     <b-form-group id="select-word-group">
       <v-select
         id="select-word"
