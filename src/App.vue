@@ -96,6 +96,12 @@ body {
   background-color: #F1F1F1 !important;
 }
 
+.modal {
+  a {
+    word-break: break-word;
+  }
+}
+
 .feather {
   width: 14px;
   height: 14px;
