@@ -48,7 +48,7 @@ const store = new Vuex.Store({
             
             // exclude empty sentiment score data points
             if(dataPoint.sS !== 'None') {
-              yearlySentimentData[sourceObjIndex].data.push([yearData.y, dataPoint.sS]);
+              yearlySentimentData[sourceObjIndex].data.push([yearData.y, parseFloat(dataPoint.sS)]);
             }
 
           } else {
@@ -65,7 +65,7 @@ const store = new Vuex.Store({
             if(dataPoint.sS !== 'None') {
               yearlySentimentData.push({
                 name: dataPoint.s,
-                data: [[yearData.y, dataPoint.sS]]
+                data: [[yearData.y, parseFloat(dataPoint.sS)]]
               });
             }
           }
