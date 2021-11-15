@@ -45,7 +45,12 @@ const store = new Vuex.Store({
             // Start: Temp: Random sentiment score
             //if (dataPoint.sS === 0) dataPoint.sS = Math.round( (Math.random() * 2 - 1) * 1e2 ) / 1e2 ;
             // End: Temp: Random sentiment score
-            yearlySentimentData[sourceObjIndex].data.push([yearData.y, dataPoint.sS]);
+            
+            // exclude empty sentiment score data points
+            if(dataPoint.sS !== 'None') {
+              yearlySentimentData[sourceObjIndex].data.push([yearData.y, dataPoint.sS]);
+            }
+
           } else {
             chartDataSources.push(dataPoint.s);
             yearlyFreqData.push({
@@ -55,10 +60,14 @@ const store = new Vuex.Store({
             // Start: Temp: Random sentiment score
             //if (dataPoint.sS === 0) dataPoint.sS = Math.round( (Math.random() * 2 - 1) * 1e2 ) / 1e2 ;
             // End: Temp: Random sentiment score
-            yearlySentimentData.push({
-              name: dataPoint.s,
-              data: [[yearData.y, dataPoint.sS]]
-            });
+            
+            // exclude empty sentiment score data points
+            if(dataPoint.sS !== 'None') {
+              yearlySentimentData.push({
+                name: dataPoint.s,
+                data: [[yearData.y, dataPoint.sS]]
+              });
+            }
           }
         }
       }
