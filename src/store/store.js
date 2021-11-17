@@ -45,7 +45,7 @@ const store = new Vuex.Store({
             // Start: Temp: Random sentiment score
             //if (dataPoint.sS === 0) dataPoint.sS = Math.round( (Math.random() * 2 - 1) * 1e2 ) / 1e2 ;
             // End: Temp: Random sentiment score
-            
+
             // exclude empty sentiment score data points
             if(dataPoint.sS !== 'None') {
               yearlySentimentData[sourceObjIndex].data.push([yearData.y, parseFloat(dataPoint.sS)]);
@@ -62,11 +62,15 @@ const store = new Vuex.Store({
             // End: Temp: Random sentiment score
             
             // exclude empty sentiment score data points
+            yearlySentimentData.push({
+              name: dataPoint.s,
+              data: []
+            })
             if(dataPoint.sS !== 'None') {
-              yearlySentimentData.push({
-                name: dataPoint.s,
-                data: [[yearData.y, parseFloat(dataPoint.sS)]]
-              });
+              let idx = yearlySentimentData.findIndex(obj => {
+                return obj.name === dataPoint.s;
+              })
+              yearlySentimentData[idx].data.push([yearData.y, parseFloat(dataPoint.sS)]);
             }
           }
         }
