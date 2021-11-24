@@ -44,7 +44,7 @@ export default {
         },
         yAxis: {
           title: {
-            text: 'Normalised Frequency (per 1m tokens)',
+            text: 'Sentiment Score',
           },
         },
         legend: {
