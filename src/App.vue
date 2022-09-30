@@ -53,9 +53,12 @@
         <li>All members of the Vienna City Council and members of the Vienna State Parliament</li>
         <li>All members of the Vienna City Senate and the Vienna State Government</li>
       </ul>
+      <p><strong>Method</strong></p>
+      <p>The sentiment scores are calculated with the help of the dictionary Austrian Language Polarity in Newspapers (ALPiN). Available: <a href="https://phaidra.univie.ac.at/view/o:1169855"> https://phaidra.univie.ac.at/view/o:1169855</a></p>
       <p><strong>Exclusion criteria</strong></p>
       <ul>
-        <li>Less than 100 hits (matching fullname) over the whole timespan: the politician is not selected.</li>
+        <li>Less than 100 hits (matching fullname) or less than 10 sentiment scores over the whole timespan: the politician is not selected.</li>
+        <li>Less than 10 hits per year/media/politician: the corresponding calculated sentiment score is excluded.</li>
         <li>Normalised frequency below 0,001: the corresponding year/media/politician is excluded.</li>
       </ul>
       <p><strong>References</strong></p>
